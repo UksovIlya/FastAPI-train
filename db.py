@@ -1,4 +1,5 @@
-from sqlalchemy import JSON, create_engine, Column, Integer, String, Float, Boolean, ForeignKey
+from pydantic import EmailStr
+from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -15,7 +16,11 @@ class ItemModel(Base):
     __tablename__ = "items"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(
+        String,
+        unique=True,
+        nullable=False
+    )
     price = Column(Float)
     author = Column(String)
     available = Column(Boolean)
@@ -26,9 +31,20 @@ class UserModel(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    email = Column(String)
-    password = Column(String)
+    name = Column(
+        String,
+        unique=True,
+        nullable=False
+    )
+    email = Column(
+        String,
+        unique=True,
+        nullable=False
+    )
+    password = Column(
+        String,
+        nullable=False
+    )
     items = relationship("ItemModel", back_populates="owner")
 
 
